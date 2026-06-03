@@ -69,6 +69,12 @@
             <version>3.15.2</version>
         </dependency>
 
+        <!-- JsonType (Hypersistence) requires Jackson 2; Spring Boot 4 defaults to Jackson 3 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
