@@ -1,33 +1,44 @@
-package dev.ctrlspace.genai2506.genaibe.models.entities;
+package dev.ctrlspace.genai2026.genaibe.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account")
-public class Account {
+@Table(name = "account_user")
+public class AccountUser {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
-    @ColumnDefault("'free'")
-    @Column(name = "plan_tier", nullable = false, length = Integer.MAX_VALUE)
-    private String planTier;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ColumnDefault("'member'")
+    @Column(name = "role", nullable = false, length = Integer.MAX_VALUE)
+    private String role;
 
     @ColumnDefault("'active'")
     @Column(name = "status", nullable = false, length = Integer.MAX_VALUE)
     private String status;
 
+    @ColumnDefault("now()")
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    @ColumnDefault("now()")
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -39,20 +50,28 @@ public class Account {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public String getPlanTier() {
-        return planTier;
+    public User getUser() {
+        return user;
     }
 
-    public void setPlanTier(String planTier) {
-        this.planTier = planTier;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getStatus() {

@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2506.genaibe.models.entities;
+package dev.ctrlspace.genai2026.genaibe.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -7,27 +7,27 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "app_user")
-public class User {
+@Table(name = "account")
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
-    private String email;
+    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
+    private String name;
 
-    @Column(name = "display_name", nullable = false, length = Integer.MAX_VALUE)
-    private String displayName;
+    @ColumnDefault("'free'")
+    @Column(name = "plan_tier", nullable = false, length = Integer.MAX_VALUE)
+    private String planTier;
 
-    @Column(name = "avatar_url", length = Integer.MAX_VALUE)
-    private String avatarUrl;
+    @ColumnDefault("'active'")
+    @Column(name = "status", nullable = false, length = Integer.MAX_VALUE)
+    private String status;
 
-    @ColumnDefault("now()")
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @ColumnDefault("now()")
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -39,28 +39,28 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getPlanTier() {
+        return planTier;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setPlanTier(String planTier) {
+        this.planTier = planTier;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getStatus() {
+        return status;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Instant getCreatedAt() {

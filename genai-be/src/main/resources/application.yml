@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: genai-be
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/genai
+    username: genai
+    password: ${DATABASE_PASSWORD:genai}
+
+logging:
+  level:
+    root: INFO
+    dev.ctrlspace.genai2026: DEBUG
+    org.springframework.security: DEBUG
+
+llms:
+  providers:
+    google:
+      base-url: https://generativelanguage.googleapis.com/v1beta/openai
+      api-key: ${GEMINI_API_KEY}

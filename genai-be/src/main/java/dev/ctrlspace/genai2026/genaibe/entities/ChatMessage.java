@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2506.genaibe.models.entities;
+package dev.ctrlspace.genai2026.genaibe.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;

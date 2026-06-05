@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2506.genaibe.models.entities;
+package dev.ctrlspace.genai2026.genaibe.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -9,8 +9,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account_user")
-public class AccountUser {
+@Table(name = "chat_thread")
+public class ChatThread {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -21,18 +21,21 @@ public class AccountUser {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "agent_id")
+    private Agent agent;
 
-    @ColumnDefault("'member'")
-    @Column(name = "role", nullable = false, length = Integer.MAX_VALUE)
-    private String role;
+    @Column(name = "title", length = Integer.MAX_VALUE)
+    private String title;
 
     @ColumnDefault("'active'")
     @Column(name = "status", nullable = false, length = Integer.MAX_VALUE)
     private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
     @ColumnDefault("now()")
     @Column(name = "created_at", nullable = false)
@@ -58,20 +61,20 @@ public class AccountUser {
         this.account = account;
     }
 
-    public User getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
-    public String getRole() {
-        return role;
+    public String getTitle() {
+        return title;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getStatus() {
@@ -80,6 +83,14 @@ public class AccountUser {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public Instant getCreatedAt() {

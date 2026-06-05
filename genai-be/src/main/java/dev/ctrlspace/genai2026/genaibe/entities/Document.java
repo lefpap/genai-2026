@@ -1,16 +1,20 @@
-package dev.ctrlspace.genai2506.genaibe.models.entities;
+package dev.ctrlspace.genai2026.genaibe.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
+
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "chat_thread")
-public class ChatThread {
+@Table(name = "document")
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -21,17 +25,18 @@ public class ChatThread {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "agent_id")
-    private Agent agent;
-
-    @Column(name = "title", length = Integer.MAX_VALUE)
+    @Column(name = "title", nullable = false, length = Integer.MAX_VALUE)
     private String title;
 
-    @ColumnDefault("'active'")
-    @Column(name = "status", nullable = false, length = Integer.MAX_VALUE)
-    private String status;
+    @Column(name = "summary", length = Integer.MAX_VALUE)
+    private String summary;
+
+    @Column(name = "body", nullable = false, length = Integer.MAX_VALUE)
+    private String body;
+
+    @Type(JsonType.class)
+    @Column(name = "embedding", columnDefinition = "vector")
+    private List<Double> embedding;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
@@ -44,6 +49,10 @@ public class ChatThread {
     @ColumnDefault("now()")
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    @ColumnDefault("'active'")
+    @Column(name = "status", nullable = false, length = Integer.MAX_VALUE)
+    private String status;
 
     public UUID getId() {
         return id;
@@ -61,14 +70,6 @@ public class ChatThread {
         this.account = account;
     }
 
-    public Agent getAgent() {
-        return agent;
-    }
-
-    public void setAgent(Agent agent) {
-        this.agent = agent;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -77,12 +78,28 @@ public class ChatThread {
         this.title = title;
     }
 
-    public String getStatus() {
-        return status;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public List<Double> getEmbedding() {
+        return embedding;
+    }
+
+    public void setEmbedding(List<Double> embedding) {
+        this.embedding = embedding;
     }
 
     public User getCreatedBy() {
@@ -107,6 +124,14 @@ public class ChatThread {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
