@@ -1,13 +1,10 @@
 package dev.ctrlspace.genai2026.genaibe.chat;
 
+import dev.ctrlspace.genai2026.genaibe.agent.FunnyInsultingAgent;
 import dev.ctrlspace.genai2026.genaibe.llm.LLMChatClient;
 import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionRequest;
 import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -15,23 +12,17 @@ import java.util.List;
 @RequestMapping("/api/{threadId}/chat")
 public class ChatController {
 
-    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
-
     private final LLMChatClient chatClient;
+    private final FunnyInsultingAgent insultingAgent;
 
-    public ChatController(LLMChatClient chatClient) {
+    public ChatController(LLMChatClient chatClient, FunnyInsultingAgent insultingAgent) {
         this.chatClient = chatClient;
+        this.insultingAgent = insultingAgent;
     }
 
     @PostMapping("/messages")
     public ChatCompletionResponse message(@PathVariable String threadId, @RequestBody ApiChatRequest chatRequest) {
-        log.debug("Chat request on thread {}: {}", threadId, chatRequest);
-
-        if (chatRequest.textInput() == null || chatRequest.textInput().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "textInput must not be blank");
-        }
-
-        var userMessage = new ChatCompletionRequest.ChatMessage("user", chatRequest.textInput());
+        var userMessage = new ChatCompletionRequest.ChatMessage("user", chatRequest.userPrompt());
         var completionRequest = new ChatCompletionRequest(
             chatRequest.model(),
             List.of(userMessage)
@@ -39,10 +30,20 @@ public class ChatController {
         return chatClient.completion(chatRequest.provider(), completionRequest);
     }
 
+    @PostMapping("/agents/insulting-agent")
+    public ChatCompletionResponse insultingAgent(@PathVariable String threadId, @RequestBody ApiChatAgentRequest agentRequest) {
+        return insultingAgent.chat(agentRequest.userPrompt());
+    }
+
     public record ApiChatRequest(
         String provider,
         String model,
-        String textInput
+        String userPrompt
+    ) {
+    }
+
+    public record ApiChatAgentRequest(
+        String userPrompt
     ) {
     }
 
