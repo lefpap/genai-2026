@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2026.genaibe.llm.dto;
+package dev.ctrlspace.genai2026.genaibe.llm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import tools.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;

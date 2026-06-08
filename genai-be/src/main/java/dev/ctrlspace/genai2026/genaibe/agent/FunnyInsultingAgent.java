@@ -1,9 +1,9 @@
 package dev.ctrlspace.genai2026.genaibe.agent;
 
 import dev.ctrlspace.genai2026.genaibe.llm.LLMChatClient;
-import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionRequest;
-import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionRequest.ChatMessage;
-import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionResponse;
+import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionRequest;
+import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionRequest.ChatMessage;
+import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

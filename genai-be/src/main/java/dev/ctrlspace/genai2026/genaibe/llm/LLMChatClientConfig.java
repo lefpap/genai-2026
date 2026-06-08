@@ -10,27 +10,28 @@ import java.util.stream.Collectors;
 
 /**
  * Builds one pre-configured {@link RestClient} (base URL + auth header) per provider
- * declared under {@code llms.providers} and exposes them through an {@link LLMClientRegistry}.
+ * declared under {@code llms.providers} and exposes them through an {@link LLMChatClientRegistry}.
  */
 @Configuration
-@EnableConfigurationProperties(LLMClientProperties.class)
-public class LLMClientConfig {
+@EnableConfigurationProperties(LLMChatClientProperties.class)
+public class LLMChatClientConfig {
 
     @Bean
-    public LLMClientRegistry llmClientRegistry(LLMClientProperties properties, RestClient.Builder builder) {
-        Map<String, RestClient> clients = properties.providers().entrySet().stream()
+    public LLMChatClientRegistry llmClientRegistry(LLMChatClientProperties properties, RestClient.Builder builder) {
+        Map<String, LLMChatClientRegistry.ProviderClient> clients = properties.providers().entrySet().stream()
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> buildClient(builder, entry.getValue())
             ));
-        return new LLMClientRegistry(clients);
+        return new LLMChatClientRegistry(clients, properties.defaultProvider());
     }
 
-    private RestClient buildClient(RestClient.Builder builder, LLMClientProperties.Provider provider) {
+    private LLMChatClientRegistry.ProviderClient buildClient(RestClient.Builder builder, LLMChatClientProperties.Provider provider) {
         // clone() so each provider gets its own base URL/auth without mutating the shared builder
-        return builder.clone()
+        RestClient client = builder.clone()
             .baseUrl(provider.baseUrl())
             .defaultHeaders(headers -> headers.setBearerAuth(provider.apiKey()))
             .build();
+        return new LLMChatClientRegistry.ProviderClient(client, provider.defaultModel());
     }
 }

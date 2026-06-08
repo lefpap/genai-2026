@@ -1,9 +1,8 @@
 package dev.ctrlspace.genai2026.genaibe.chat;
 
-import dev.ctrlspace.genai2026.genaibe.agent.FunnyInsultingAgent;
+import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionRequest;
+import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionResponse;
 import dev.ctrlspace.genai2026.genaibe.llm.LLMChatClient;
-import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionRequest;
-import dev.ctrlspace.genai2026.genaibe.llm.dto.ChatCompletionResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,42 +12,32 @@ import java.util.List;
 public class ChatController {
 
     private final LLMChatClient chatClient;
-    private final FunnyInsultingAgent insultingAgent;
 
-    public ChatController(LLMChatClient chatClient, FunnyInsultingAgent insultingAgent) {
+    public ChatController(LLMChatClient chatClient) {
         this.chatClient = chatClient;
-        this.insultingAgent = insultingAgent;
     }
 
     @PostMapping("/messages")
-    public ChatCompletionResponse message(@PathVariable String threadId, @RequestBody ApiChatRequest chatRequest) {
-        var userMessage = new ChatCompletionRequest.ChatMessage("user", chatRequest.userPrompt());
+    public ApiChatResponse message(@PathVariable String threadId, @RequestBody ApiChatRequest chatRequest) {
+        var userMessage = ChatCompletionRequest.ChatMessage.user(chatRequest.message());
         var completionRequest = new ChatCompletionRequest(
             chatRequest.model(),
             List.of(userMessage)
         );
-        return chatClient.completion(chatRequest.provider(), completionRequest);
-    }
 
-    @PostMapping("/agents/insulting-agent")
-    public ChatCompletionResponse insultingAgent(@PathVariable String threadId, @RequestBody ApiChatAgentRequest agentRequest) {
-        return insultingAgent.chat(agentRequest.userPrompt());
+        ChatCompletionResponse completion = chatClient.completion(completionRequest);
+        String content = completion.choices().getFirst().message().content();
+        return new ApiChatResponse(content);
     }
 
     public record ApiChatRequest(
-        String provider,
         String model,
-        String userPrompt
-    ) {
-    }
-
-    public record ApiChatAgentRequest(
-        String userPrompt
+        String message
     ) {
     }
 
     public record ApiChatResponse(
-        String message
+        String answer
     ) {
     }
 }

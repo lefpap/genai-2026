@@ -1,8 +1,15 @@
-package dev.ctrlspace.genai2026.genaibe.llm.dto;
+package dev.ctrlspace.genai2026.genaibe.llm;
+
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder(toBuilder = true, setterPrefix = "with")
 public record ChatCompletionRequest(String model, List<ChatMessage> messages) {
+
+    public static ChatCompletionRequest messages(List<ChatMessage> messages) {
+        return new ChatCompletionRequest(null, messages);
+    }
 
     public record ChatMessage(
         String role,
@@ -15,10 +22,6 @@ public record ChatCompletionRequest(String model, List<ChatMessage> messages) {
 
         public static ChatMessage user(String content) {
             return new ChatMessage("user", content);
-        }
-
-        public static ChatMessage assistant(String content) {
-            return new ChatMessage("assistant", content);
         }
     }
 }
