@@ -1,39 +1,27 @@
 package io.github.lefpap.genaibe.llm;
 
-import io.github.lefpap.genaibe.llm.LLMChatClientRegistry.ProviderClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import java.util.Objects;
 
 @Service
 public class LLMChatClient {
 
-    private final LLMChatClientRegistry registry;
+    private final RestClient restClient;
+    private final LLMChatClientProperties properties;
 
-    public LLMChatClient(LLMChatClientRegistry registry) {
-        this.registry = registry;
+    public LLMChatClient(RestClient llmChatRestClient, LLMChatClientProperties properties) {
+        this.restClient = llmChatRestClient;
+        this.properties = properties;
     }
 
-    /**
-     * Completion against the configured default provider ({@code llms.default-provider}).
-     */
     public ChatCompletionResponse completion(ChatCompletionRequest request) {
-        return send(registry.getDefault(), request);
-    }
-
-    /**
-     * Completion against an explicitly named provider.
-     */
-    public ChatCompletionResponse completion(String provider, ChatCompletionRequest request) {
-        return send(registry.get(provider), request);
-    }
-
-    private ChatCompletionResponse send(ProviderClient provider, ChatCompletionRequest request) {
         ChatCompletionRequest effectiveRequest = request.toBuilder()
-            .withModel(Objects.requireNonNullElseGet(request.model(), provider::defaultModel))
+            .withModel(Objects.requireNonNullElseGet(request.model(), properties::defaultModel))
             .build();
 
-        return provider.client().post()
+        return restClient.post()
             .uri("/chat/completions")
             .body(effectiveRequest)
             .retrieve()

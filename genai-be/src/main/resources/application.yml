@@ -17,9 +17,13 @@ logging:
     org.springframework.security: DEBUG
 
 llms:
-  default-provider: google
-  providers:
-    google:
-      base-url: https://generativelanguage.googleapis.com/v1beta/openai
-      api-key: ${GEMINI_API_KEY}
-      default-model: gemini-3.1-flash-lite
+  client:
+    base-url: https://generativelanguage.googleapis.com/v1beta/openai
+    api-key: ${GEMINI_API_KEY}
+    default-model: gemini-3.1-flash-lite
+
+embeddings:
+  client:
+    base-url: https://generativelanguage.googleapis.com/v1beta/openai
+    api-key: ${GEMINI_API_KEY}
+    default-model: gemini-3.1-flash-lite

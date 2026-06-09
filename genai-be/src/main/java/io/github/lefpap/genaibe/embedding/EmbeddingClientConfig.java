@@ -1,22 +1,20 @@
-package io.github.lefpap.genaibe.llm;
+package io.github.lefpap.genaibe.embedding;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-/**
- * Builds one pre-configured {@link RestClient} (base URL + auth header) per provider
- */
 @Configuration
-@EnableConfigurationProperties(LLMChatClientProperties.class)
-public class LLMChatClientConfig {
+@EnableConfigurationProperties(EmbeddingClientProperties.class)
+public class EmbeddingClientConfig {
 
     @Bean
-    public RestClient llmChatRestClient(RestClient.Builder builder, LLMChatClientProperties properties) {
-        return builder.clone()
+    public RestClient embeddingRestClient(RestClient.Builder restClientBuilder, EmbeddingClientProperties properties) {
+        return restClientBuilder.clone()
             .baseUrl(properties.baseUrl())
             .defaultHeaders(headers -> headers.setBearerAuth(properties.apiKey()))
             .build();
     }
+
 }

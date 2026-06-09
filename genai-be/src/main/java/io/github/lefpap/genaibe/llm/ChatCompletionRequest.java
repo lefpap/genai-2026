@@ -1,11 +1,12 @@
 package io.github.lefpap.genaibe.llm;
 
 import lombok.Builder;
+import lombok.Singular;
 
 import java.util.List;
 
 @Builder(toBuilder = true, setterPrefix = "with")
-public record ChatCompletionRequest(String model, List<ChatMessage> messages) {
+public record ChatCompletionRequest(String model, @Singular List<ChatMessage> messages) {
 
     public static ChatCompletionRequest messages(List<ChatMessage> messages) {
         return new ChatCompletionRequest(null, messages);
