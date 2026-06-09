@@ -24,6 +24,6 @@ llms:
 
 embeddings:
   client:
-    base-url: https://generativelanguage.googleapis.com/v1beta/openai
-    api-key: ${GEMINI_API_KEY}
-    default-model: gemini-3.1-flash-lite
+    base-url: https://api.voyageai.com/v1
+    api-key: ${VOYAGE_API_KEY}
+    default-model: voyage-4-lite

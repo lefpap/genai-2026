@@ -9,6 +9,6 @@ import java.util.List;
 @Builder(toBuilder = true, setterPrefix = "with")
 public record EmbeddingRequest(
     String model,
-    @Singular("inputs") List<String> input
+    @Singular("input") List<String> input
 ) {
 }
