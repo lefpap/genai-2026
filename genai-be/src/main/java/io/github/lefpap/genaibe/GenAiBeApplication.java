@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2026.genaibe;
+package io.github.lefpap.genaibe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

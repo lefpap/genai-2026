@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2026.genaibe.llm;
+package io.github.lefpap.genaibe.llm;
 
 import org.springframework.web.client.RestClient;
 

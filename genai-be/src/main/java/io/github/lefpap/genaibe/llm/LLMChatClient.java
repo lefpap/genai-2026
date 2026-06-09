@@ -1,6 +1,6 @@
-package dev.ctrlspace.genai2026.genaibe.llm;
+package io.github.lefpap.genaibe.llm;
 
-import dev.ctrlspace.genai2026.genaibe.llm.LLMChatClientRegistry.ProviderClient;
+import io.github.lefpap.genaibe.llm.LLMChatClientRegistry.ProviderClient;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

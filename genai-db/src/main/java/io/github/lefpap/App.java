@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2026;
+package io.github.lefpap;
 
 /**
  * Hello world!

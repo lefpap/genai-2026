@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2026.genaibe.chat;
+package io.github.lefpap.genaibe.chat;
 
 import jakarta.persistence.*;
 import lombok.Getter;

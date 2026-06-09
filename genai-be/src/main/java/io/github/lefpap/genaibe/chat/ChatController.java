@@ -1,8 +1,8 @@
-package dev.ctrlspace.genai2026.genaibe.chat;
+package io.github.lefpap.genaibe.chat;
 
-import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionRequest;
-import dev.ctrlspace.genai2026.genaibe.llm.ChatCompletionResponse;
-import dev.ctrlspace.genai2026.genaibe.llm.LLMChatClient;
+import io.github.lefpap.genaibe.llm.ChatCompletionRequest;
+import io.github.lefpap.genaibe.llm.ChatCompletionResponse;
+import io.github.lefpap.genaibe.llm.LLMChatClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
