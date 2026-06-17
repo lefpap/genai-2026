@@ -1,4 +1,4 @@
-package io.github.lefpap.genaibe.document;
+package io.github.lefpap.genaibe.document.model;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;

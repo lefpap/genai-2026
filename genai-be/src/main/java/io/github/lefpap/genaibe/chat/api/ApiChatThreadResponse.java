@@ -1,4 +1,4 @@
-package io.github.lefpap.genaibe.document;
+package io.github.lefpap.genaibe.chat.api;
 
 import lombok.Builder;
 
@@ -6,8 +6,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Builder(toBuilder = true, setterPrefix = "with")
-public record ApiDocumentResponse(
+public record ApiChatThreadResponse(
     UUID id,
     String title,
-    Instant createdAt
-) { }
+    Instant createdAt,
+    Instant updatedAt
+) {
+}

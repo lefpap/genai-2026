@@ -1,13 +1,12 @@
-package io.github.lefpap.genaibe.chat;
+package io.github.lefpap.genaibe.chat.service;
 
-import io.github.lefpap.genaibe.document.DocumentTools;
+import io.github.lefpap.genaibe.document.tool.DocumentTools;
 import org.springframework.ai.chat.client.AdvisorParams;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/api/{threadId}/chat")
-public class ChatController {
+@Service
+public class ChatAgentAssistant {
 
     private static final String SYSTEM_PROMPT = """
         You are a helpful assistant that can answer job posting related. When answering questions, you should use the
@@ -17,32 +16,18 @@ public class ChatController {
 
     private final ChatClient chatClient;
 
-    public ChatController(ChatClient.Builder chatBuilder, DocumentTools documentTools) {
+    public ChatAgentAssistant(ChatClient.Builder chatBuilder, DocumentTools documentTools) {
         this.chatClient = chatBuilder
             .defaultAdvisors(AdvisorParams.toolCallingAdvisorAutoRegister(true))
             .defaultTools(documentTools)
             .defaultSystem(SYSTEM_PROMPT)
             .build();
-
     }
 
-    @PostMapping("/messages")
-    public ApiChatResponse message(@PathVariable String threadId, @RequestBody ApiChatRequest chatRequest) {
-        String answer = chatClient.prompt()
-            .user(chatRequest.message())
+    public String chat(String text) {
+        return chatClient.prompt()
+            .user(text)
             .call()
             .content();
-
-        return new ApiChatResponse(answer);
-    }
-
-    public record ApiChatRequest(
-        String message
-    ) {
-    }
-
-    public record ApiChatResponse(
-        String answer
-    ) {
     }
 }

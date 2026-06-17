@@ -1,5 +1,6 @@
-package io.github.lefpap.genaibe.document;
+package io.github.lefpap.genaibe.document.repository;
 
+import io.github.lefpap.genaibe.document.model.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 

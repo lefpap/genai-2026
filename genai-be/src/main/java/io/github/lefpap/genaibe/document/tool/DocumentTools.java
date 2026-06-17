@@ -1,5 +1,7 @@
-package io.github.lefpap.genaibe.document;
+package io.github.lefpap.genaibe.document.tool;
 
+import io.github.lefpap.genaibe.document.model.Document;
+import io.github.lefpap.genaibe.document.service.DocumentService;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package io.github.lefpap.genaibe.chat;
+package io.github.lefpap.genaibe.chat.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

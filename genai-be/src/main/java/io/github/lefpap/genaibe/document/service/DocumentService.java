@@ -1,5 +1,7 @@
-package io.github.lefpap.genaibe.document;
+package io.github.lefpap.genaibe.document.service;
 
+import io.github.lefpap.genaibe.document.repository.DocumentRepository;
+import io.github.lefpap.genaibe.document.model.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 
