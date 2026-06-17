@@ -1,20 +1,17 @@
-package io.github.lefpap.genaibe.llm;
+package io.github.lefpap.genaibe.lib.voyage;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-/**
- * Builds one pre-configured {@link RestClient} (base URL + auth header) per provider
- */
 @Configuration
-@EnableConfigurationProperties(LLMChatClientProperties.class)
-public class LLMChatClientConfig {
+@EnableConfigurationProperties(VoyageEmbeddingProperties.class)
+public class VoyageEmbeddingConfig {
 
     @Bean
-    public RestClient llmChatRestClient(RestClient.Builder builder, LLMChatClientProperties properties) {
-        return builder.clone()
+    RestClient voyageRestClient(RestClient.Builder restClientBuilder, VoyageEmbeddingProperties properties) {
+        return restClientBuilder.clone()
             .baseUrl(properties.baseUrl())
             .defaultHeaders(headers -> headers.setBearerAuth(properties.apiKey()))
             .build();

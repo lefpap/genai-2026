@@ -10,20 +10,25 @@ spring:
     username: genai
     password: ${DATABASE_PASSWORD:genai}
 
+  ai:
+    openai:
+      base-url: https://generativelanguage.googleapis.com/v1beta/openai
+      api-key: ${GEMINI_API_KEY}
+      chat:
+        model: gemini-3.1-flash-lite
+    # Disable OpenAI embedding auto-config: Voyage is served by VoyageEmbeddingModel,
+    # because Voyage's response omits usage.prompt_tokens which the OpenAI client requires.
+    model:
+      embedding: none
+
+# Voyage AI embeddings (consumed by VoyageEmbeddingModel)
+voyage:
+  base-url: https://api.voyageai.com/v1
+  api-key: ${VOYAGE_API_KEY}
+  model: voyage-4-lite
+
 logging:
   level:
     root: INFO
     dev.ctrlspace.genai2026: DEBUG
     org.springframework.security: DEBUG
-
-llms:
-  client:
-    base-url: https://generativelanguage.googleapis.com/v1beta/openai
-    api-key: ${GEMINI_API_KEY}
-    default-model: gemini-3.1-flash-lite
-
-embeddings:
-  client:
-    base-url: https://api.voyageai.com/v1
-    api-key: ${VOYAGE_API_KEY}
-    default-model: voyage-4-lite

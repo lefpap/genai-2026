@@ -1,37 +1,42 @@
 package io.github.lefpap.genaibe.chat;
 
-import io.github.lefpap.genaibe.llm.ChatCompletionRequest;
-import io.github.lefpap.genaibe.llm.ChatCompletionResponse;
-import io.github.lefpap.genaibe.llm.LLMChatClient;
+import io.github.lefpap.genaibe.document.DocumentTools;
+import org.springframework.ai.chat.client.AdvisorParams;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/{threadId}/chat")
 public class ChatController {
 
-    private final LLMChatClient chatClient;
+    private static final String SYSTEM_PROMPT = """
+        You are a helpful assistant that can answer job posting related. When answering questions, you should use the
+        information from the documents to provide accurate and relevant responses. If the answer is not found in the 
+        documents, you should respond with "I'm sorry, I don't have enough information to answer that question.".
+        """;
 
-    public ChatController(LLMChatClient chatClient) {
-        this.chatClient = chatClient;
+    private final ChatClient chatClient;
+
+    public ChatController(ChatClient.Builder chatBuilder, DocumentTools documentTools) {
+        this.chatClient = chatBuilder
+            .defaultAdvisors(AdvisorParams.toolCallingAdvisorAutoRegister(true))
+            .defaultTools(documentTools)
+            .defaultSystem(SYSTEM_PROMPT)
+            .build();
+
     }
 
     @PostMapping("/messages")
     public ApiChatResponse message(@PathVariable String threadId, @RequestBody ApiChatRequest chatRequest) {
-        var userMessage = ChatCompletionRequest.ChatMessage.user(chatRequest.message());
-        var completionRequest = new ChatCompletionRequest(
-            chatRequest.model(),
-            List.of(userMessage)
-        );
+        String answer = chatClient.prompt()
+            .user(chatRequest.message())
+            .call()
+            .content();
 
-        ChatCompletionResponse completion = chatClient.completion(completionRequest);
-        String content = completion.choices().getFirst().message().content();
-        return new ApiChatResponse(content);
+        return new ApiChatResponse(answer);
     }
 
     public record ApiChatRequest(
-        String model,
         String message
     ) {
     }

@@ -1,9 +1,6 @@
 package io.github.lefpap.genaibe.agent;
 
-import io.github.lefpap.genaibe.llm.ChatCompletionRequest;
-import io.github.lefpap.genaibe.llm.ChatCompletionRequest.ChatMessage;
-import io.github.lefpap.genaibe.llm.ChatCompletionResponse;
-import io.github.lefpap.genaibe.llm.LLMChatClient;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,18 +10,18 @@ public class FunnyInsultingAgent {
         You try to be funny, Every response, make it a soft/funny insult.
         """;
 
-    private final LLMChatClient chatClient;
+    private final ChatClient chatClient;
 
-    public FunnyInsultingAgent(LLMChatClient chatClient) {
-        this.chatClient = chatClient;
+    public FunnyInsultingAgent(ChatClient.Builder chatClient) {
+        this.chatClient = chatClient
+            .defaultSystem(SYSTEM_PROMPT)
+            .build();
     }
 
-    public ChatCompletionResponse chat(String userPrompt) {
-        ChatCompletionRequest request = ChatCompletionRequest.builder()
-            .withMessage(ChatMessage.system(SYSTEM_PROMPT))
-            .withMessage(ChatMessage.user(userPrompt))
-            .build();
-
-        return chatClient.completion(request);
+    public String chat(String text) {
+        return chatClient.prompt()
+            .user(text)
+            .call()
+            .content();
     }
 }
