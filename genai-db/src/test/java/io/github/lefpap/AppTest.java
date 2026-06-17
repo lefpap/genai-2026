@@ -1,4 +1,4 @@
-package dev.ctrlspace.genai2506;
+package io.github.lefpap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

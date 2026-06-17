@@ -14,11 +14,13 @@ CREATE TABLE IF NOT EXISTS chat_thread (
 CREATE TABLE IF NOT EXISTS chat_message (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     thread_id UUID NOT NULL REFERENCES chat_thread(id) ON DELETE CASCADE,
+    role TEXT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_chat_message_thread ON chat_message(thread_id);
+-- Covers ordered history reads for a thread (and thread-only lookups via the leftmost column).
+CREATE INDEX IF NOT EXISTS idx_chat_message_thread_created ON chat_message(thread_id, created_at);
 
 -- Documents are curated per account (aligns with FE document list)
 CREATE TABLE IF NOT EXISTS document (

@@ -3,7 +3,7 @@ package io.github.lefpap.genaibe.chat.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -25,10 +25,13 @@ public class ChatMessage {
     @JoinColumn(name = "thread_id", nullable = false)
     private ChatThread thread;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     @Column(name = "content", nullable = false, length = Integer.MAX_VALUE)
     private String content;
 
-    @ColumnDefault("now()")
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
