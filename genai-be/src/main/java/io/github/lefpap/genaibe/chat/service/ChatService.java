@@ -12,12 +12,12 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
-public class ChatThreadService {
+public class ChatService {
 
     private final ChatThreadRepository chatThreadRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    public ChatThreadService(ChatThreadRepository chatThreadRepository, ChatMessageRepository chatMessageRepository) {
+    public ChatService(ChatThreadRepository chatThreadRepository, ChatMessageRepository chatMessageRepository) {
         this.chatThreadRepository = chatThreadRepository;
         this.chatMessageRepository = chatMessageRepository;
     }

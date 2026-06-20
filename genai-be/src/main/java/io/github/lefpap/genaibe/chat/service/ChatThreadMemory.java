@@ -26,17 +26,17 @@ public class ChatThreadMemory implements ChatMemory {
 
     private static final int MAX_MESSAGES = 20;
 
-    private final ChatThreadService chatThreadService;
+    private final ChatService chatService;
 
-    public ChatThreadMemory(ChatThreadService chatThreadService) {
-        this.chatThreadService = chatThreadService;
+    public ChatThreadMemory(ChatService chatService) {
+        this.chatService = chatService;
     }
 
     @Override
     @Transactional(readOnly = true)
     public @NonNull List<Message> get(@NonNull String conversationId) {
         UUID threadId = UUID.fromString(conversationId);
-        List<ChatMessage> messages = chatThreadService.getChatThreadHistory(threadId);
+        List<ChatMessage> messages = chatService.getChatThreadHistory(threadId);
 
         // Replay only the most recent window to the model.
         int from = Math.max(0, messages.size() - MAX_MESSAGES);
@@ -55,7 +55,7 @@ public class ChatThreadMemory implements ChatMemory {
                 ChatMessage chatMessage = new ChatMessage();
                 chatMessage.setContent(m.getText());
                 chatMessage.setRole(m.getMessageType().name());
-                chatThreadService.createChatMessage(threadId, chatMessage);
+                chatService.createChatMessage(threadId, chatMessage);
             });
     }
 
@@ -63,7 +63,7 @@ public class ChatThreadMemory implements ChatMemory {
     @Transactional
     public void clear(@NonNull String conversationId) {
         UUID threadId = UUID.fromString(conversationId);
-        chatThreadService.deleteChatThreadHistory(threadId);
+        chatService.deleteChatThreadHistory(threadId);
     }
 
     private Message toAiMessage(ChatMessage message) {
