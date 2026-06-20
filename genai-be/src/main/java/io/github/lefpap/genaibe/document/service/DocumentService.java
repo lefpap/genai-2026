@@ -1,11 +1,13 @@
 package io.github.lefpap.genaibe.document.service;
 
-import io.github.lefpap.genaibe.document.repository.DocumentRepository;
 import io.github.lefpap.genaibe.document.model.Document;
+import io.github.lefpap.genaibe.document.repository.DocumentRepository;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class DocumentService {
@@ -16,6 +18,15 @@ public class DocumentService {
     public DocumentService(EmbeddingModel embeddingModel, DocumentRepository documentRepository) {
         this.embeddingModel = embeddingModel;
         this.documentRepository = documentRepository;
+    }
+
+    public List<Document> getDocuments() {
+        return documentRepository.findAll();
+    }
+
+    public Document getDocument(UUID id) {
+        return documentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Document not found with id: " + id));
     }
 
     public Document saveDocument(Document document) {

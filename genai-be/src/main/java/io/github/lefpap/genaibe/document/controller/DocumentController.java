@@ -1,13 +1,14 @@
 package io.github.lefpap.genaibe.document.controller;
 
-import io.github.lefpap.genaibe.document.model.Document;
-import io.github.lefpap.genaibe.document.service.DocumentService;
+import io.github.lefpap.genaibe.document.api.ApiDocumentEnrichedResponse;
 import io.github.lefpap.genaibe.document.api.ApiDocumentResponse;
 import io.github.lefpap.genaibe.document.api.ApiUploadPlainTextDocumentRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.github.lefpap.genaibe.document.model.Document;
+import io.github.lefpap.genaibe.document.service.DocumentService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/documents")
@@ -19,9 +20,39 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @PostMapping("/plain")
+    @GetMapping
+    public List<ApiDocumentResponse> listDocuments() {
+        return documentService.getDocuments().stream()
+                .map(DocumentController::toApiDocumentResponse)
+                .toList();
+    }
+
+    @GetMapping("/{documentId}")
+    public ApiDocumentEnrichedResponse getDocument(@PathVariable UUID documentId) {
+        Document document = documentService.getDocument(documentId);
+        return toApiDocumentEnrichedResponse(document);
+    }
+
+    @PostMapping("/upload/plain")
     public ApiDocumentResponse uploadPlainText(@RequestBody ApiUploadPlainTextDocumentRequest request) {
         Document created = documentService.saveDocument(request.toDocument());
-        return ApiDocumentResponse.from(created);
+        return toApiDocumentResponse(created);
+    }
+
+    private static ApiDocumentResponse toApiDocumentResponse(Document document) {
+        return ApiDocumentResponse.builder()
+                .withId(document.getId())
+                .withTitle(document.getTitle())
+                .withCreatedAt(document.getCreatedAt())
+                .build();
+    }
+
+    private static ApiDocumentEnrichedResponse toApiDocumentEnrichedResponse(Document document) {
+        return ApiDocumentEnrichedResponse.builder()
+                .withId(document.getId())
+                .withTitle(document.getTitle())
+                .withContent(document.getContent())
+                .withCreatedAt(document.getCreatedAt())
+                .build();
     }
 }

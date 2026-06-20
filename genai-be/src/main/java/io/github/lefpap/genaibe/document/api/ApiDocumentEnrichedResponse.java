@@ -6,8 +6,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Builder(toBuilder = true, setterPrefix = "with")
-public record ApiDocumentResponse(
+public record ApiDocumentEnrichedResponse(
     UUID id,
     String title,
+    String content,
     Instant createdAt
 ) { }
